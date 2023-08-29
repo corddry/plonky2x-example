@@ -9,7 +9,7 @@ use std::env;
 
 use plonky2x::frontend::eth::vars::AddressVariable;
 use plonky2x::frontend::vars::{Bytes32Variable, U32Variable};
-use plonky2x::prelude::CircuitBuilder;
+use plonky2x::prelude::{CircuitBuilder, CircuitVariable};
 use plonky2x::prelude::Variable;
 
 pub struct U32AddFunction {}
@@ -65,6 +65,13 @@ impl CircuitFunction for Keccak256MerkleProofFunction {
         // Note that assert_is_equal operates over Variable, not Bytes32Variable so for now you
         // will need to do something like: builder.assert_is_equal(a.variables(), b.variables()) if
         // a and b are of type Bytes32Variable.
+
+        let hashleaf: Bytes32Variable = builder.keccak256(&leaf.0.0);
+        let hash2: Bytes32Variable = builder.keccak256(&[hashleaf.0.0, siblings[0].0.0].concat());
+        let hash2: Bytes32Variable = builder.keccak256(&[hash2.0.0, siblings[1].0.0].concat());
+        for i in 0..root.variables().len() {
+            builder.assert_is_equal(root.variables()[i], hash2.variables()[i]);
+        }
 
         builder.build::<C>()
     }
