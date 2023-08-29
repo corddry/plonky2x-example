@@ -1,4 +1,5 @@
-use ethers::providers::{Http, Provider};
+#![feature(generic_const_exprs)]
+
 use plonky2::field::extension::Extendable;
 use plonky2::hash::hash_types::RichField;
 use plonky2::plonk::config::{AlgebraicHasher, GenericConfig};
@@ -7,7 +8,6 @@ use plonky2x::backend::function::CircuitFunction;
 use plonky2x::utils::bytes32;
 use std::env;
 
-use plonky2x::frontend::eth::vars::AddressVariable;
 use plonky2x::frontend::vars::{Bytes32Variable, U32Variable};
 use plonky2x::prelude::{CircuitBuilder, CircuitVariable};
 use plonky2x::prelude::Variable;
